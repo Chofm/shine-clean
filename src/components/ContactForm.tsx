@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { NavLink } from "./NavLink";
 
 const ContactForm = () => {
   const { toast } = useToast();
@@ -138,7 +139,7 @@ const ContactForm = () => {
                     }
                   />
                   <Label htmlFor="privacy" className="text-sm leading-relaxed cursor-pointer">
-                    Ich habe die <a href="#" className="text-primary hover:underline">Datenschutzerklärung</a> zur 
+                    Ich habe die <NavLink to="/datenschutz" className="text-primary hover:underline">Datenschutzerklärung</NavLink> zur 
                     Kenntnis genommen. Ich stimme zu, dass meine Angaben zur Kontaktaufnahme und für 
                     Rückfragen dauerhaft gespeichert werden.
                   </Label>

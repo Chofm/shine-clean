@@ -1,4 +1,5 @@
 import { Facebook, Instagram, Mail, Phone } from "lucide-react";
+import { NavLink } from "./NavLink";
 
 const Footer = () => {
   return (
@@ -31,11 +32,11 @@ const Footer = () => {
           <div>
             <h4 className="font-bold mb-4">Schnelllinks</h4>
             <ul className="space-y-2 text-secondary-foreground/80">
-              <li><a href="#" className="hover:text-secondary-foreground transition-colors">Leistungen</a></li>
-              <li><a href="#" className="hover:text-secondary-foreground transition-colors">Über uns</a></li>
-              <li><a href="#kontakt" className="hover:text-secondary-foreground transition-colors">Kontakt</a></li>
-              <li><a href="#" className="hover:text-secondary-foreground transition-colors">Impressum</a></li>
-              <li><a href="#" className="hover:text-secondary-foreground transition-colors">Datenschutz</a></li>
+              <li><a href="/#leistungen" className="hover:text-secondary-foreground transition-colors">Leistungen</a></li>
+              <li><a href="/#warum-wir" className="hover:text-secondary-foreground transition-colors">Über uns</a></li>
+              <li><a href="/#kontakt" className="hover:text-secondary-foreground transition-colors">Kontakt</a></li>
+              <li><NavLink to="/impressum" className="hover:text-secondary-foreground transition-colors">Impressum</NavLink></li>
+              <li><NavLink to="/datenschutz" className="hover:text-secondary-foreground transition-colors">Datenschutz</NavLink></li>
             </ul>
           </div>
 
