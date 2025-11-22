@@ -1,115 +1,18 @@
-import { useMemo, useState } from "react";
+import { Mail, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useToast } from "@/hooks/use-toast";
-import { Mail, Phone, MapPin } from "lucide-react";
 import { NavLink } from "./NavLink";
 
-const ContactForm = () => {
-  const { toast } = useToast();
-  const endpoint = useMemo(() => import.meta.env.VITE_CONTACT_ENDPOINT as string | undefined, []);
-
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-    message: "",
-    privacy: false,
-    honeypot: ""
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (formData.honeypot.trim()) {
-      return;
-    }
-
-    if (!formData.privacy) {
-      toast({
-        title: "Datenschutz",
-        description: "Bitte akzeptieren Sie die Datenschutzerklärung",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    const phoneIsValid = /^[+]?[-\s()/0-9]{6,}$/.test(formData.phone.trim());
-    if (!phoneIsValid) {
-      toast({
-        title: "Telefon ungültig",
-        description: "Bitte geben Sie eine gültige Telefonnummer an",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (!endpoint) {
-      window.location.href = `mailto:info@dachreinigung.de?subject=Kontaktanfrage&body=${encodeURIComponent(
-        `${formData.name}\n${formData.phone}\n${formData.email}\n${formData.address}\n\n${formData.message}`
-      )}`;
-
-      toast({
-        title: "E-Mail Programm geöffnet",
-        description: "Falls sich kein Fenster öffnet, kontaktieren Sie uns bitte direkt per Telefon.",
-      });
-
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.name.trim(),
-          email: formData.email.trim(),
-          phone: formData.phone.trim(),
-          address: formData.address.trim(),
-          message: formData.message.trim()
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error("Formular konnte nicht gesendet werden");
-      }
-
-      toast({
-        title: "Anfrage gesendet!",
-        description: "Wir melden uns in Kürze bei Ihnen.",
-      });
-
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        address: "",
-        message: "",
-        privacy: false,
-        honeypot: ""
-      });
-    } catch (error) {
-      console.error(error);
-      toast({
-        title: "Senden fehlgeschlagen",
-        description: "Bitte versuchen Sie es erneut oder kontaktieren Sie uns telefonisch.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+const ContactForm: React.FC = () => {
+  // Einfacher Status aus Query-Param, falls send.php mit ?success=1 / ?error=1 zurückkommt
+  let status: "idle" | "success" | "error" = "idle";
+  if (typeof window !== "undefined") {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("success") === "1") status = "success";
+    if (params.get("error") === "1") status = "error";
+  }
 
   return (
     <section id="kontakt" className="py-20 bg-background">
@@ -124,18 +27,31 @@ const ContactForm = () => {
             </p>
           </div>
 
+          {status === "success" && (
+            <div className="mb-8 rounded-lg border border-emerald-300 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+              Ihre Anfrage wurde erfolgreich gesendet. Wir melden uns in Kürze bei Ihnen.
+            </div>
+          )}
+
+          {status === "error" && (
+            <div className="mb-8 rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800">
+              Beim Senden ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut
+              oder kontaktieren Sie uns telefonisch.
+            </div>
+          )}
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div>
-              <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Klassisches POST-Formular an send.php */}
+              <form action="/send.php" method="POST" className="space-y-6" noValidate>
+                {/* Honeypot-Feld gegen Bots */}
                 <div className="hidden">
                   <Label htmlFor="company">Firma</Label>
                   <Input
                     id="company"
                     name="honeypot"
-                    value={formData.honeypot}
-                    onChange={handleChange}
-                    tabIndex={-1}
                     autoComplete="off"
+                    tabIndex={-1}
                   />
                 </div>
 
@@ -144,10 +60,9 @@ const ContactForm = () => {
                   <Input
                     id="name"
                     name="name"
-                    value={formData.name}
-                    onChange={handleChange}
                     required
                     className="mt-1"
+                    autoComplete="name"
                   />
                 </div>
 
@@ -157,10 +72,9 @@ const ContactForm = () => {
                     id="email"
                     name="email"
                     type="email"
-                    value={formData.email}
-                    onChange={handleChange}
                     required
                     className="mt-1"
+                    autoComplete="email"
                   />
                 </div>
 
@@ -170,11 +84,10 @@ const ContactForm = () => {
                     id="phone"
                     name="phone"
                     type="tel"
-                    value={formData.phone}
-                    onChange={handleChange}
                     required
-                    inputMode="tel"
                     className="mt-1"
+                    inputMode="tel"
+                    autoComplete="tel"
                   />
                 </div>
 
@@ -183,10 +96,9 @@ const ContactForm = () => {
                   <Input
                     id="address"
                     name="address"
-                    value={formData.address}
-                    onChange={handleChange}
                     required
                     className="mt-1"
+                    autoComplete="street-address"
                   />
                 </div>
 
@@ -195,8 +107,6 @@ const ContactForm = () => {
                   <Textarea
                     id="message"
                     name="message"
-                    value={formData.message}
-                    onChange={handleChange}
                     required
                     rows={4}
                     className="mt-1"
@@ -205,17 +115,21 @@ const ContactForm = () => {
                 </div>
 
                 <div className="flex items-start gap-2">
-                  <Checkbox
+                  {/* Normale Checkbox, kein fancy JS nötig */}
+                  <input
                     id="privacy"
-                    checked={formData.privacy}
-                    onCheckedChange={(checked) => 
-                      setFormData({ ...formData, privacy: checked as boolean })
-                    }
+                    name="privacy"
+                    type="checkbox"
+                    required
+                    className="mt-1 h-4 w-4 rounded border border-input text-primary"
                   />
                   <Label htmlFor="privacy" className="text-sm leading-relaxed cursor-pointer">
-                    Ich habe die <NavLink to="/datenschutz" className="text-primary hover:underline">Datenschutzerklärung</NavLink> zur 
-                    Kenntnis genommen. Ich stimme zu, dass meine Angaben zur Kontaktaufnahme und für 
-                    Rückfragen dauerhaft gespeichert werden.
+                    Ich habe die{" "}
+                    <NavLink to="/datenschutz" className="text-primary hover:underline">
+                      Datenschutzerklärung
+                    </NavLink>{" "}
+                    zur Kenntnis genommen. Ich stimme zu, dass meine Angaben zur
+                    Kontaktaufnahme und für Rückfragen dauerhaft gespeichert werden.
                   </Label>
                 </div>
 
@@ -223,13 +137,13 @@ const ContactForm = () => {
                   type="submit"
                   size="lg"
                   className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
-                  disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Wird gesendet…" : "Anfrage senden"}
+                  Anfrage senden
                 </Button>
               </form>
             </div>
 
+            {/* Rechte Seite: Kontaktinfos */}
             <div className="space-y-8">
               <div>
                 <h3 className="text-2xl font-bold text-foreground mb-6">
