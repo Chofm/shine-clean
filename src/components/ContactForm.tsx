@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,18 +10,26 @@ import { NavLink } from "./NavLink";
 
 const ContactForm = () => {
   const { toast } = useToast();
+  const endpoint = useMemo(() => import.meta.env.VITE_CONTACT_ENDPOINT as string | undefined, []);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     address: "",
     message: "",
-    privacy: false
+    privacy: false,
+    honeypot: ""
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    if (formData.honeypot.trim()) {
+      return;
+    }
+
     if (!formData.privacy) {
       toast({
         title: "Datenschutz",
@@ -31,19 +39,72 @@ const ContactForm = () => {
       return;
     }
 
-    toast({
-      title: "Anfrage gesendet!",
-      description: "Wir melden uns in Kürze bei Ihnen.",
-    });
-    
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      address: "",
-      message: "",
-      privacy: false
-    });
+    const phoneIsValid = /^[+]?[-\s()/0-9]{6,}$/.test(formData.phone.trim());
+    if (!phoneIsValid) {
+      toast({
+        title: "Telefon ungültig",
+        description: "Bitte geben Sie eine gültige Telefonnummer an",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!endpoint) {
+      window.location.href = `mailto:info@dachreinigung.de?subject=Kontaktanfrage&body=${encodeURIComponent(
+        `${formData.name}\n${formData.phone}\n${formData.email}\n${formData.address}\n\n${formData.message}`
+      )}`;
+
+      toast({
+        title: "E-Mail Programm geöffnet",
+        description: "Falls sich kein Fenster öffnet, kontaktieren Sie uns bitte direkt per Telefon.",
+      });
+
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim(),
+          address: formData.address.trim(),
+          message: formData.message.trim()
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("Formular konnte nicht gesendet werden");
+      }
+
+      toast({
+        title: "Anfrage gesendet!",
+        description: "Wir melden uns in Kürze bei Ihnen.",
+      });
+
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+        message: "",
+        privacy: false,
+        honeypot: ""
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Senden fehlgeschlagen",
+        description: "Bitte versuchen Sie es erneut oder kontaktieren Sie uns telefonisch.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -66,6 +127,18 @@ const ContactForm = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div>
               <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="hidden">
+                  <Label htmlFor="company">Firma</Label>
+                  <Input
+                    id="company"
+                    name="honeypot"
+                    value={formData.honeypot}
+                    onChange={handleChange}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
+
                 <div>
                   <Label htmlFor="name">Name *</Label>
                   <Input
@@ -100,6 +173,7 @@ const ContactForm = () => {
                     value={formData.phone}
                     onChange={handleChange}
                     required
+                    inputMode="tel"
                     className="mt-1"
                   />
                 </div>
@@ -145,12 +219,13 @@ const ContactForm = () => {
                   </Label>
                 </div>
 
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   size="lg"
                   className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
+                  disabled={isSubmitting}
                 >
-                  Anfrage senden
+                  {isSubmitting ? "Wird gesendet…" : "Anfrage senden"}
                 </Button>
               </form>
             </div>

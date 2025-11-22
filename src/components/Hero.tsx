@@ -26,8 +26,8 @@ const Hero = () => {
           <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 max-w-2xl">
             Wir bringen Ihr Objekt wieder zum Strahlen. Dach, Fassade, Pflaster – alles aus einer Hand.
           </p>
-          <Button 
-            size="lg" 
+          <Button
+            size="lg"
             onClick={scrollToContact}
             className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-8 py-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
           >
