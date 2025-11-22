@@ -35,9 +35,11 @@ const Gallery = () => {
                   <div className="absolute top-2 left-2 bg-destructive text-destructive-foreground px-3 py-1 rounded-md text-sm font-semibold z-10">
                     Vorher
                   </div>
-                  <img 
-                    src={item.before} 
+                  <img
+                    src={item.before}
                     alt={`Vorher ${item.label}`}
+                    loading="lazy"
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                     className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                 </div>
@@ -45,9 +47,11 @@ const Gallery = () => {
                   <div className="absolute top-2 left-2 bg-green-600 text-white px-3 py-1 rounded-md text-sm font-semibold z-10">
                     Nachher
                   </div>
-                  <img 
-                    src={item.after} 
+                  <img
+                    src={item.after}
                     alt={`Nachher ${item.label}`}
+                    loading="lazy"
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                     className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                 </div>

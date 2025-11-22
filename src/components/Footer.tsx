@@ -12,15 +12,19 @@ const Footer = () => {
               Ihr professioneller Partner für saubere Dächer und Fassaden in der Region.
             </p>
             <div className="flex gap-4">
-              <a 
-                href="#" 
+              <a
+                href="https://www.facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-secondary-foreground/10 hover:bg-secondary-foreground/20 flex items-center justify-center transition-colors"
                 aria-label="Facebook"
               >
                 <Facebook className="w-5 h-5" />
               </a>
-              <a 
-                href="#" 
+              <a
+                href="https://www.instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-secondary-foreground/10 hover:bg-secondary-foreground/20 flex items-center justify-center transition-colors"
                 aria-label="Instagram"
               >
@@ -45,11 +49,11 @@ const Footer = () => {
             <ul className="space-y-3 text-secondary-foreground/80">
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4" />
-                <span>+49 (0) 211 1234567</span>
+                <a href="tel:+492111234567" className="hover:text-secondary-foreground transition-colors">+49 (0) 211 1234567</a>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4" />
-                <span>info@dachreinigung.de</span>
+                <a href="mailto:info@dachreinigung.de" className="hover:text-secondary-foreground transition-colors">info@dachreinigung.de</a>
               </li>
             </ul>
             <div className="mt-4">
