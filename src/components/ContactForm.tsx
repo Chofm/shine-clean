@@ -156,8 +156,7 @@ const ContactForm: React.FC = () => {
                     </div>
                     <div>
                       <p className="font-semibold text-foreground">Telefon</p>
-                      <p className="text-muted-foreground">+49 (0) 211 1234567</p>
-                      <p className="text-muted-foreground">+49 (0) 176 98765432</p>
+                      <p className="text-muted-foreground">+49 15750738409</p>
                     </div>
                   </div>
 
@@ -167,7 +166,7 @@ const ContactForm: React.FC = () => {
                     </div>
                     <div>
                       <p className="font-semibold text-foreground">E-Mail</p>
-                      <p className="text-muted-foreground">info@dachreinigung.de</p>
+                      <p className="text-muted-foreground">info@RLdachreinigung.de</p>
                     </div>
                   </div>
 
@@ -177,8 +176,8 @@ const ContactForm: React.FC = () => {
                     </div>
                     <div>
                       <p className="font-semibold text-foreground">Adresse</p>
-                      <p className="text-muted-foreground">Musterstraße 123</p>
-                      <p className="text-muted-foreground">40210 Düsseldorf</p>
+                      <p className="text-muted-foreground">Petersberger Straße 20</p>
+                      <p className="text-muted-foreground">36251 Bad Hersfeld</p>
                     </div>
                   </div>
                 </div>

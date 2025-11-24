@@ -10,7 +10,7 @@ const Navigation = () => {
       <div className="container px-4">
         <div className="flex items-center justify-between h-16">
           <NavLink to="/" className="text-xl font-bold text-foreground">
-            Dach- & Gebäudereinigung
+            Dach und Gebäudereinigung ReinhardtLindt
           </NavLink>
 
           {/* Desktop Navigation */}
@@ -40,20 +40,8 @@ const Navigation = () => {
             >
               Kontakt
             </a>
-            <NavLink 
-              to="/impressum" 
-              className="text-foreground/70 hover:text-foreground transition-colors"
-              activeClassName="text-foreground font-semibold"
-            >
-              Impressum
-            </NavLink>
-            <NavLink 
-              to="/datenschutz" 
-              className="text-foreground/70 hover:text-foreground transition-colors"
-              activeClassName="text-foreground font-semibold"
-            >
-              Datenschutz
-            </NavLink>
+          
+           
           </div>
 
           {/* Mobile Menu Button */}
