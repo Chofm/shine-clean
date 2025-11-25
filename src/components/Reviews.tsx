@@ -4,42 +4,40 @@ import { Card, CardContent } from "@/components/ui/card";
 const reviews = [
   {
     name: "Michael Schmidt",
-    location: "Düsseldorf",
+
     rating: 5,
     text: "Hervorragende Arbeit! Unser Dach sieht aus wie neu. Sehr professionell und pünktlich.",
     date: "vor 2 Wochen"
   },
   {
     name: "Sandra Müller",
-    location: "Köln",
+    
     rating: 5,
     text: "Faire Preise und saubere Ausführung. Die Fassade unseres Hauses erstrahlt wieder. Absolut empfehlenswert!",
     date: "vor 1 Monat"
   },
   {
     name: "Thomas Weber",
-    location: "Essen",
+   
     rating: 5,
     text: "Schnelle Terminvereinbarung und gründliche Reinigung unserer Einfahrt. Top Service!",
     date: "vor 3 Wochen"
   },
   {
     name: "Julia Hoffmann",
-    location: "Dortmund",
+    
     rating: 5,
     text: "Sehr zufrieden mit der Dachrinnenreinigung. Freundliches Team und faire Festpreise.",
     date: "vor 2 Monaten"
   },
   {
     name: "Klaus Becker",
-    location: "Düsseldorf",
     rating: 5,
     text: "Professionelle Solaranlagenreinigung. Die Leistung ist merklich gestiegen. Danke!",
     date: "vor 1 Monat"
   },
   {
     name: "Anna Fischer",
-    location: "Bonn",
     rating: 5,
     text: "Rundum zufrieden! Pünktlich, sauber und zu einem fairen Preis. Gerne wieder.",
     date: "vor 3 Wochen"
