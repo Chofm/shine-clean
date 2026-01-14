@@ -24,7 +24,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 // Wohin soll die E-Mail gehen?
-$to = "info@dachreinigung"; // <-- ÄNDERN!
+$to = "info@rldachreinigung.de"; // <-- ÄNDERN!
 
 $subject = "Neue Kontaktanfrage von $name";
 
