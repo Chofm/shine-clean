@@ -7,6 +7,7 @@ import NotFound from "./pages/NotFound";
 import Impressum from "./pages/Impressum";
 import Datenschutz from "./pages/Datenschutz";
 import Navigation from "./components/Navigation";
+import ProjectGallery from "./components/ProjectGallery";
 
 const App = () => (
   <TooltipProvider>
